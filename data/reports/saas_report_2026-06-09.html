@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Health Briefing — 2026-06-09</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a2e; font-size: 14px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 16px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  h1 { font-size: 20px; font-weight: 700; color: #1a1a2e; }
+  .date-badge { background: #e8f4fd; color: #1565c0; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi-card { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 4px solid #ccc; }
+  .kpi-card.blue { border-left-color: #1565c0; }
+  .kpi-card.orange { border-left-color: #e65100; }
+  .kpi-card.green { border-left-color: #2e7d32; }
+  .kpi-card.red { border-left-color: #c62828; }
+  .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #666; margin-bottom: 6px; }
+  .kpi-value { font-size: 24px; font-weight: 700; color: #1a1a2e; }
+  .kpi-sub { font-size: 11px; color: #888; margin-top: 3px; }
+
+  /* Two-column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .card { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .card h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #444; margin-bottom: 12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 6px 8px; background: #f8f9fa; color: #555; font-weight: 600; font-size: 11px; text-transform: uppercase; }
+  td { padding: 7px 8px; border-bottom: 1px solid #f0f0f0; }
+  tr:last-child td { border-bottom: none; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+  .badge-watch { background: #fff3e0; color: #e65100; }
+  .badge-healthy { background: #e8f5e9; color: #2e7d32; }
+  .badge-highrisk { background: #fce4ec; color: #c62828; }
+
+  /* Chart */
+  .chart-container { position: relative; height: 160px; display: flex; align-items: flex-end; gap: 8px; padding: 0 4px; }
+  .chart-group { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 2px; }
+  .chart-bars { display: flex; gap: 3px; align-items: flex-end; height: 130px; }
+  .bar { border-radius: 3px 3px 0 0; min-width: 18px; position: relative; transition: opacity 0.2s; }
+  .bar:hover { opacity: 0.8; }
+  .bar-plan { background: #1565c0; }
+  .bar-region { background: #42a5f5; }
+  .bar-label { font-size: 10px; color: #666; text-align: center; margin-top: 4px; white-space: nowrap; }
+  .chart-legend { display: flex; gap: 12px; margin-bottom: 8px; font-size: 11px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-right: 4px; }
+  .threshold-line { position: absolute; left: 0; right: 0; border-top: 2px dashed #c62828; opacity: 0.7; }
+  .threshold-label { position: absolute; right: 0; font-size: 10px; color: #c62828; background: white; padding: 0 2px; }
+  .y-axis { display: flex; flex-direction: column-reverse; justify-content: space-between; height: 130px; padding-bottom: 0; font-size: 10px; color: #aaa; margin-right: 4px; }
+
+  /* High-risk section */
+  .alert-section { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .alert-section h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #444; margin-bottom: 12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+  .alert-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f8f8f8; }
+  .alert-item:last-child { border-bottom: none; }
+  .alert-icon { font-size: 20px; flex-shrink: 0; }
+  .alert-body h3 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+  .alert-body p { font-size: 12px; color: #555; line-height: 1.5; }
+  .alert-stats { display: flex; gap: 12px; margin-top: 5px; }
+  .alert-stat { font-size: 11px; background: #f8f9fa; padding: 2px 8px; border-radius: 4px; color: #444; }
+
+  /* At-risk table */
+  .atrisk-section { background: white; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .atrisk-section h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #444; margin-bottom: 12px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+
+  footer { text-align: center; font-size: 11px; color: #aaa; padding: 8px 0; }
+
+  /* Inline bar in table */
+  .progress { background: #f0f0f0; border-radius: 4px; height: 6px; width: 80px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+  .progress-fill { height: 100%; border-radius: 4px; }
+  .fill-watch { background: #f5a623; }
+  .fill-healthy { background: #4caf50; }
+  .fill-highrisk { background: #e53935; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>SaaS Health Briefing — 2026-06-09</h1>
+    <span class="date-badge">Snapshot: 09/06/2026</span>
+  </header>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-label">Total MRR</div>
+      <div class="kpi-value">$507,490</div>
+      <div class="kpi-sub">Active customers only</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">Overall Churn Rate</div>
+      <div class="kpi-value">14.3%</div>
+      <div class="kpi-sub">429 / 3,000 customers</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Active Customers</div>
+      <div class="kpi-value">2,574</div>
+      <div class="kpi-sub">85.8% retention</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">Revenue at Risk</div>
+      <div class="kpi-value">$41,144</div>
+      <div class="kpi-sub">From churned accounts</div>
+    </div>
+  </div>
+
+  <!-- Plan table + Region table -->
+  <div class="two-col">
+    <div class="card">
+      <h2>Breakdown theo Plan</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Customers</th>
+            <th>Churn Rate</th>
+            <th>Active MRR</th>
+            <th>Rev at Risk</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Basic</strong></td>
+            <td>1,660</td>
+            <td>
+              19.0%
+              <span class="progress"><span class="progress-fill fill-watch" style="width:95%"></span></span>
+            </td>
+            <td>$47,322</td>
+            <td>$10,703</td>
+            <td><span class="badge badge-watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pro</strong></td>
+            <td>880</td>
+            <td>
+              10.1%
+              <span class="progress"><span class="progress-fill fill-watch" style="width:50%"></span></span>
+            </td>
+            <td>$89,140</td>
+            <td>$9,750</td>
+            <td><span class="badge badge-watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td><strong>Enterprise</strong></td>
+            <td>460</td>
+            <td>
+              5.4%
+              <span class="progress"><span class="progress-fill fill-healthy" style="width:27%"></span></span>
+            </td>
+            <td>$371,029</td>
+            <td>$20,691</td>
+            <td><span class="badge badge-healthy">✅ Healthy</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Breakdown theo Region</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>Customers</th>
+            <th>Churn Rate</th>
+            <th>Active MRR</th>
+            <th>Rev at Risk</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>APAC</strong></td>
+            <td>1,140</td>
+            <td>
+              15.6%
+              <span class="progress"><span class="progress-fill fill-watch" style="width:78%"></span></span>
+            </td>
+            <td>$185,562</td>
+            <td>$15,919</td>
+            <td><span class="badge badge-watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td><strong>EMEA</strong></td>
+            <td>1,012</td>
+            <td>
+              14.1%
+              <span class="progress"><span class="progress-fill fill-watch" style="width:70%"></span></span>
+            </td>
+            <td>$169,802</td>
+            <td>$14,748</td>
+            <td><span class="badge badge-watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td><strong>Americas</strong></td>
+            <td>698</td>
+            <td>
+              12.9%
+              <span class="progress"><span class="progress-fill fill-watch" style="width:64%"></span></span>
+            </td>
+            <td>$124,810</td>
+            <td>$9,861</td>
+            <td><span class="badge badge-watch">⚠️ Watch</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Chart: Churn by Plan & Region -->
+  <div class="card" style="margin-bottom:16px;">
+    <h2>Churn Rate theo Plan &amp; Region</h2>
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px;">
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:#1565c0"></span>Plan</span>
+        <span><span class="legend-dot" style="background:#42a5f5"></span>Region</span>
+        <span style="color:#c62828;font-weight:600;">— Ngưỡng cảnh báo 20%</span>
+      </div>
+    </div>
+    <div style="display:flex; gap:0; align-items:flex-end; height:180px; position:relative;">
+      <!-- Y-axis labels -->
+      <div style="display:flex;flex-direction:column-reverse;height:150px;justify-content:space-between;font-size:10px;color:#aaa;padding-right:6px;margin-bottom:0;align-self:flex-end;">
+        <span>0%</span>
+        <span>5%</span>
+        <span>10%</span>
+        <span>15%</span>
+        <span>20%</span>
+        <span>25%</span>
+      </div>
+      <!-- Chart bars -->
+      <div style="flex:1;display:flex;align-items:flex-end;gap:10px;height:150px;position:relative;">
+        <!-- Threshold line at 20% = 120px out of 150px (150*20/25=120) -->
+        <div style="position:absolute;left:0;right:0;bottom:120px;border-top:2px dashed #c62828;z-index:2;">
+          <span style="position:absolute;right:0;top:-14px;font-size:10px;color:#c62828;background:white;padding:0 2px;">20% alert</span>
+        </div>
+        <!-- Basic 19% = 114px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#1565c0;width:100%;height:114px;border-radius:3px 3px 0 0;position:relative;" title="Basic: 19.0%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">19.0%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">Basic</div>
+        </div>
+        <!-- Pro 10.1% = 60.6px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#1565c0;width:100%;height:61px;border-radius:3px 3px 0 0;position:relative;" title="Pro: 10.1%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">10.1%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">Pro</div>
+        </div>
+        <!-- Enterprise 5.4% = 32.4px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#1565c0;width:100%;height:32px;border-radius:3px 3px 0 0;position:relative;" title="Enterprise: 5.4%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">5.4%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">Enterprise</div>
+        </div>
+        <!-- spacer -->
+        <div style="width:20px;"></div>
+        <!-- APAC 15.6% = 93.6px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#42a5f5;width:100%;height:94px;border-radius:3px 3px 0 0;position:relative;" title="APAC: 15.6%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">15.6%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">APAC</div>
+        </div>
+        <!-- EMEA 14.1% = 84.6px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#42a5f5;width:100%;height:85px;border-radius:3px 3px 0 0;position:relative;" title="EMEA: 14.1%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">14.1%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">EMEA</div>
+        </div>
+        <!-- Americas 12.9% = 77.4px -->
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="background:#42a5f5;width:100%;height:77px;border-radius:3px 3px 0 0;position:relative;" title="Americas: 12.9%">
+            <span style="position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#1565c0;">12.9%</span>
+          </div>
+          <div style="font-size:10px;color:#555;margin-top:4px;text-align:center;">Americas</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Watch Segments (Top 3 by churn) -->
+  <div class="alert-section">
+    <h2>⚠️ Segments cần chú ý hôm nay (Top 3 theo Churn Rate)</h2>
+    <div class="alert-item">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <h3>Basic Plan — Churn Rate 19.0% (sát ngưỡng cảnh báo 20%)</h3>
+        <p>Đây là segment có churn rate cao nhất, chỉ còn 1 điểm phần trăm dưới ngưỡng cảnh báo. Với 1,660 khách hàng và MRR chỉ $47K, Basic plan đang đóng góp rất ít doanh thu nhưng chiếm phần lớn khối lượng hỗ trợ. Cần xem xét chiến lược upsell sang Pro hoặc cải thiện onboarding để giữ chân nhóm này.</p>
+        <div class="alert-stats">
+          <span class="alert-stat">315 churned</span>
+          <span class="alert-stat">MRR $47,322</span>
+          <span class="alert-stat">RAR $10,703</span>
+          <span class="badge badge-watch">⚠️ Watch</span>
+        </div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <h3>APAC Region — Churn Rate 15.6% (cao nhất theo vùng)</h3>
+        <p>APAC là region có churn rate cao nhất (15.6%) đồng thời cũng là region đông khách nhất (1,140 KH). Revenue at Risk $15,919 cao nhất trong 3 vùng. Cần điều tra nguyên nhân theo địa phương — có thể do vấn đề về pricing, cạnh tranh, hoặc hỗ trợ ngôn ngữ chưa đủ.</p>
+        <div class="alert-stats">
+          <span class="alert-stat">178 churned</span>
+          <span class="alert-stat">MRR $185,562</span>
+          <span class="alert-stat">RAR $15,919</span>
+          <span class="badge badge-watch">⚠️ Watch</span>
+        </div>
+      </div>
+    </div>
+    <div class="alert-item">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <h3>EMEA Region — Churn Rate 14.1% (ổn định nhưng cần theo dõi)</h3>
+        <p>EMEA có churn 14.1% — cao hơn Americas và tương đương mức trung bình toàn hệ thống. Với MRR $169K, đây là thị trường quan trọng thứ 2. Tập trung vào nhóm Basic + EMEA (intersection) có thể mang lại hiệu quả giữ chân cao nhất.</p>
+        <div class="alert-stats">
+          <span class="alert-stat">143 churned</span>
+          <span class="alert-stat">MRR $169,802</span>
+          <span class="alert-stat">RAR $14,748</span>
+          <span class="badge badge-watch">⚠️ Watch</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- At-risk customers -->
+  <div class="atrisk-section">
+    <h2>Khách hàng Active có nguy cơ rời bỏ (Top 5 — tenure &lt; 6 tháng, không phải Enterprise)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer ID</th>
+          <th>Plan</th>
+          <th>Region</th>
+          <th>Tenure</th>
+          <th>Monthly Revenue</th>
+          <th>Ghi chú</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>CUS-1001</strong></td>
+          <td>Pro</td>
+          <td>EMEA</td>
+          <td>5 tháng</td>
+          <td>$150.00</td>
+          <td>Sắp hết giai đoạn onboarding</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>CUS-3343</strong></td>
+          <td>Pro</td>
+          <td>APAC</td>
+          <td>4 tháng</td>
+          <td>$150.00</td>
+          <td>APAC high-churn region</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>CUS-1882</strong></td>
+          <td>Pro</td>
+          <td>EMEA</td>
+          <td>2 tháng</td>
+          <td>$150.00</td>
+          <td>Mới onboard, cần check-in</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>CUS-1565</strong></td>
+          <td>Pro</td>
+          <td>Americas</td>
+          <td>0 tháng</td>
+          <td>$150.00</td>
+          <td>Vừa đăng ký — ưu tiên cao</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>CUS-3726</strong></td>
+          <td>Pro</td>
+          <td>EMEA</td>
+          <td>3 tháng</td>
+          <td>$150.00</td>
+          <td>EMEA, cần follow-up</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Generated: 2026-06-09 &nbsp;|&nbsp; Data source: subscription_saas.csv (3,000 records) &nbsp;|&nbsp; SaaS Subscription Analyst
+  </footer>
+
+</div>
+</body>
+</html>

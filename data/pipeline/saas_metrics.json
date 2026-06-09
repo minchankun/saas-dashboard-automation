@@ -1,0 +1,107 @@
+{
+  "date": "2026-06-09",
+  "overall": {
+    "total_mrr": 507490.28,
+    "total_customers": 3000,
+    "active_customers": 2574,
+    "churned_customers": 429,
+    "overall_churn_rate": 0.143,
+    "revenue_at_risk": 41144.22
+  },
+  "by_plan": {
+    "Basic": {
+      "total": 1660,
+      "active": 1348,
+      "churned": 315,
+      "churn_rate": 0.1897590361445783,
+      "mrr": 47321.79999999996,
+      "avg_tenure": 17.08132530120482,
+      "revenue_at_risk": 10703.110000000004
+    },
+    "Pro": {
+      "total": 880,
+      "active": 791,
+      "churned": 89,
+      "churn_rate": 0.10113636363636364,
+      "mrr": 89139.7899999999,
+      "avg_tenure": 16.693181818181817,
+      "revenue_at_risk": 9750.14
+    },
+    "Enterprise": {
+      "total": 460,
+      "active": 435,
+      "churned": 25,
+      "churn_rate": 0.05434782608695652,
+      "mrr": 371028.68999999965,
+      "avg_tenure": 16.76304347826087,
+      "revenue_at_risk": 20690.969999999998
+    }
+  },
+  "by_region": {
+    "APAC": {
+      "total": 1140,
+      "active": 963,
+      "churned": 178,
+      "churn_rate": 0.156140350877193,
+      "mrr": 185561.83000000002,
+      "avg_tenure": 17.106140350877194,
+      "revenue_at_risk": 15918.690000000008
+    },
+    "EMEA": {
+      "total": 1012,
+      "active": 870,
+      "churned": 143,
+      "churn_rate": 0.14130434782608695,
+      "mrr": 169802.43999999992,
+      "avg_tenure": 16.711462450592887,
+      "revenue_at_risk": 14747.900000000005
+    },
+    "Americas": {
+      "total": 698,
+      "active": 609,
+      "churned": 90,
+      "churn_rate": 0.12893982808022922,
+      "mrr": 124810.29000000001,
+      "avg_tenure": 16.603151862464184,
+      "revenue_at_risk": 9861.46
+    }
+  },
+  "at_risk_customers": [
+    {
+      "customer_id": "CUS-1001",
+      "plan": "Pro",
+      "region": "EMEA",
+      "tenure_months": 5,
+      "monthly_revenue": 150.0
+    },
+    {
+      "customer_id": "CUS-3343",
+      "plan": "Pro",
+      "region": "APAC",
+      "tenure_months": 4,
+      "monthly_revenue": 150.0
+    },
+    {
+      "customer_id": "CUS-1882",
+      "plan": "Pro",
+      "region": "EMEA",
+      "tenure_months": 2,
+      "monthly_revenue": 150.0
+    },
+    {
+      "customer_id": "CUS-1565",
+      "plan": "Pro",
+      "region": "Americas",
+      "tenure_months": 0,
+      "monthly_revenue": 150.0
+    },
+    {
+      "customer_id": "CUS-3726",
+      "plan": "Pro",
+      "region": "EMEA",
+      "tenure_months": 3,
+      "monthly_revenue": 150.0
+    }
+  ],
+  "churn_alert_threshold": 0.2
+}
