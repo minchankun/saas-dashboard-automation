@@ -1,0 +1,38 @@
+name: SaaS Daily Fetch
+
+on:
+  schedule:
+    # Chạy lúc 11:00 UTC = 18:00 giờ Việt Nam, thứ 2 đến thứ 6
+    - cron: '0 11 * * 1-5'
+  workflow_dispatch:
+    # Cho phép chạy thủ công từ tab Actions trên GitHub
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Cần để commit logs vào repo
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate SaaS data
+        run: python fetch_data.py
+
+      - name: Commit và push logs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add logs/last_updated.txt logs/fetch.log
+          git diff --staged --quiet || git commit -m "data: saas daily update $(date +'%Y-%m-%d')"
+          git push
