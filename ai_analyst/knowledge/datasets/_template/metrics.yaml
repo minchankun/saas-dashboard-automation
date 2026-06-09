@@ -1,0 +1,64 @@
+# Dataset Metrics Configuration — subscription_saas
+# Defines KPIs, their directions, thresholds, and relationships.
+# Used by validation, scoring, and reporting modules.
+
+dataset:
+  name: "subscription_saas"
+  description: "Customer-level SaaS subscription snapshot — churn classification & MRR segmentation"
+
+metrics:
+  churn_rate:
+    display_name: "Churn Rate"
+    column: "churn"
+    type: "percentage"
+    direction: "down_is_good"
+    format: "{:.1%}"
+    alert_thresholds:
+      absolute_max: 0.15      # Alert nếu churn rate vượt 15%
+    related_metrics:
+      - "monthly_revenue"
+      - "tenure_months"
+
+  monthly_revenue:
+    display_name: "MRR (Monthly Recurring Revenue)"
+    column: "monthly_revenue"
+    type: "currency"
+    direction: "up_is_good"
+    format: "${:,.2f}"
+    alert_thresholds:
+      absolute_min: 0         # Flag các dòng MRR âm là data quality issue
+    related_metrics:
+      - "churn_rate"
+      - "plan"
+
+  tenure_months:
+    display_name: "Customer Tenure"
+    column: "tenure_months"
+    type: "duration"
+    direction: "up_is_good"
+    format: "{:.0f} months"
+    related_metrics:
+      - "churn_rate"
+
+segments:
+  - column: "plan"
+    display_name: "Subscription Plan"
+    expected_values: ["Basic", "Pro", "Enterprise"]
+  - column: "region"
+    display_name: "Region"
+    expected_values: ["APAC", "EMEA", "Americas"]
+  - column: "status"
+    display_name: "Account Status"
+    expected_values: ["Active", "Churned"]
+
+waterfall:
+  # MRR waterfall không áp dụng trực tiếp (không có dữ liệu period-over-period).
+  # Thay bằng MRR breakdown theo segment:
+  baseline: "total_mrr_active"
+  components:
+    - name: "Churned Revenue (revenue lost)"
+      column: "monthly_revenue"
+      filter: "churn == 'Yes'"
+      direction: "negative"
+    - name: "Revenue at Risk (active, high-risk customers)"
+      direction: "negative"

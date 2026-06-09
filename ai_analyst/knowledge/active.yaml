@@ -1,0 +1,20 @@
+# Active Dataset Pointer
+# Points to the currently active dataset for analysis.
+# Updated automatically when a new dataset is loaded.
+#
+# Usage:
+#   active_dataset = safe_read_yaml("knowledge/active.yaml")
+#   dataset_dir = f"knowledge/datasets/{active_dataset['name']}"
+
+name: "subscription_saas"           # Dataset directory name (e.g., "sales_2025")
+description: "SaaS subscription dataset — 3,000 customers with plan tier, signup date, region, tenure, monthly revenue, status, and churn label"
+source_file: "data/raw/subscription_saas.csv"  # Original file path (CSV/Excel)
+loaded_at: "2026-06-06T00:00:00"    # ISO timestamp when loaded
+row_count: 3000                     # Number of rows
+column_count: 8                     # Number of columns
+date_range:
+  start: "2023-01-01"              # First date in the dataset
+  end: "2025-12-31"                # Last date in the dataset
+  grain: "daily"                   # Temporal grain (daily/weekly/monthly/quarterly/yearly)
+primary_metric: "monthly_revenue"  # Auto-detected or user-specified primary KPI
+domain: "saas_revenue"             # Auto-detected domain (saas_revenue, ecommerce, etc.)
