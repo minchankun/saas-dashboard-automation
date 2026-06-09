@@ -1,0 +1,21 @@
+# ─── CẤU HÌNH CHÍNH ───────────────────────────────────────────
+# Chỉ cần sửa file này. fetch_data.py và agent đều đọc từ đây.
+
+segments:
+  plans:
+    - Basic
+    - Pro
+    - Enterprise
+  regions:
+    - APAC
+    - EMEA
+    - Americas
+
+analysis:
+  churn_alert_threshold: 0.20   # churn rate > 20% = cảnh báo 🚨
+  top_atrisk: 5                 # số KH at-risk hiển thị trong report
+  mrr_currency: USD
+
+report:
+  top_segments: 3               # số segment hiển thị trong "High Risk"
+  language: vi                  # vi = tiếng Việt, en = tiếng Anh
