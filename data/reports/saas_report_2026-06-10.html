@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Health Briefing — 2026-06-10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a2e; font-size: 13px; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #3b82f6; }
+  .header h1 { font-size: 18px; font-weight: 700; color: #1e3a5f; }
+  .header .meta { font-size: 11px; color: #6b7280; }
+
+  /* KPI Cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .kpi { background: #fff; border-radius: 8px; padding: 14px 16px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .kpi.danger { border-left-color: #ef4444; }
+  .kpi.warn { border-left-color: #f59e0b; }
+  .kpi.green { border-left-color: #10b981; }
+  .kpi-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: #6b7280; margin-bottom: 4px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #111827; line-height: 1; }
+  .kpi-sub { font-size: 10px; color: #9ca3af; margin-top: 3px; }
+
+  /* Two-column layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+
+  /* Cards */
+  .card { background: #fff; border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .card h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #374151; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #f3f4f6; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10px; font-weight: 600; text-transform: uppercase; color: #6b7280; text-align: left; padding: 5px 8px; background: #f9fafb; }
+  td { padding: 6px 8px; border-top: 1px solid #f3f4f6; font-size: 12px; }
+  tr:hover td { background: #f9fafb; }
+  .badge { display: inline-block; padding: 2px 7px; border-radius: 99px; font-size: 10px; font-weight: 600; }
+  .badge.watch { background: #fef3c7; color: #92400e; }
+  .badge.healthy { background: #d1fae5; color: #065f46; }
+  .badge.high { background: #fee2e2; color: #991b1b; }
+
+  /* Chart bars */
+  .chart-wrap { display: flex; flex-direction: column; gap: 7px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; }
+  .bar-label { width: 76px; font-size: 11px; color: #374151; text-align: right; flex-shrink: 0; }
+  .bar-bg { flex: 1; background: #f3f4f6; border-radius: 3px; height: 18px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; padding-left: 6px; font-size: 10px; font-weight: 600; color: #fff; transition: width .3s; }
+  .bar-fill.basic   { background: #f59e0b; }
+  .bar-fill.pro     { background: #3b82f6; }
+  .bar-fill.enterprise { background: #10b981; }
+  .bar-fill.apac    { background: #8b5cf6; }
+  .bar-fill.emea    { background: #06b6d4; }
+  .bar-fill.americas { background: #ec4899; }
+  .threshold-note { font-size: 10px; color: #9ca3af; margin-top: 6px; }
+
+  /* Watch segments */
+  .segment-list { display: flex; flex-direction: column; gap: 8px; }
+  .seg-item { padding: 9px 12px; border-radius: 6px; border-left: 3px solid; }
+  .seg-item.watch-item { border-color: #f59e0b; background: #fffbeb; }
+  .seg-item.healthy-item { border-color: #10b981; background: #f0fdf4; }
+  .seg-title { font-size: 12px; font-weight: 700; color: #111827; margin-bottom: 3px; }
+  .seg-desc { font-size: 11px; color: #4b5563; line-height: 1.4; }
+
+  /* At-risk table */
+  .atrisk-badge { background: #fee2e2; color: #b91c1c; padding: 1px 6px; border-radius: 99px; font-size: 10px; }
+
+  /* Footer */
+  .footer { text-align: center; font-size: 10px; color: #9ca3af; margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>📊 SaaS Health Briefing — 2026-06-10</h1>
+    <div class="meta">Data: 2026-06-09 &nbsp;|&nbsp; 3,000 customers &nbsp;|&nbsp; Auto-generated</div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-label">Total MRR</div>
+      <div class="kpi-value">$507,490</div>
+      <div class="kpi-sub">Active customers only</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-label">Overall Churn Rate</div>
+      <div class="kpi-value">12.1%</div>
+      <div class="kpi-sub">362 / 3,000 customers</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Active Customers</div>
+      <div class="kpi-value">2,574</div>
+      <div class="kpi-sub">85.8% of total</div>
+    </div>
+    <div class="kpi danger">
+      <div class="kpi-label">Revenue at Risk</div>
+      <div class="kpi-value">$30,630</div>
+      <div class="kpi-sub">From churned accounts</div>
+    </div>
+  </div>
+
+  <!-- Plan Table + Chart -->
+  <div class="two-col">
+
+    <!-- Plan Breakdown Table -->
+    <div class="card">
+      <h2>Breakdown theo Plan</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Customers</th>
+            <th>Churn Rate</th>
+            <th>Active MRR</th>
+            <th>Rev. at Risk</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Basic</strong></td>
+            <td>909</td>
+            <td><strong>16.5%</strong></td>
+            <td>$47,322</td>
+            <td>$9,326</td>
+            <td><span class="badge watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pro</strong></td>
+            <td>1,094</td>
+            <td><strong>8.2%</strong></td>
+            <td>$89,140</td>
+            <td>$7,998</td>
+            <td><span class="badge healthy">✅ Healthy</span></td>
+          </tr>
+          <tr>
+            <td><strong>Enterprise</strong></td>
+            <td>997</td>
+            <td><strong>3.5%</strong></td>
+            <td>$371,029</td>
+            <td>$13,306</td>
+            <td><span class="badge healthy">✅ Healthy</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Churn Rate Chart -->
+    <div class="card">
+      <h2>Churn Rate theo Plan &amp; Region</h2>
+      <div class="chart-wrap">
+        <div class="bar-row">
+          <div class="bar-label">Basic</div>
+          <div class="bar-bg"><div class="bar-fill basic" style="width:82.5%">16.5%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Pro</div>
+          <div class="bar-bg"><div class="bar-fill pro" style="width:41%">8.2%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Enterprise</div>
+          <div class="bar-bg"><div class="bar-fill enterprise" style="width:17.5%">3.5%</div></div>
+        </div>
+        <div class="bar-row" style="margin-top:6px">
+          <div class="bar-label">APAC</div>
+          <div class="bar-bg"><div class="bar-fill apac" style="width:69%">13.8%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">EMEA</div>
+          <div class="bar-bg"><div class="bar-fill emea" style="width:55.5%">11.1%</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Americas</div>
+          <div class="bar-bg"><div class="bar-fill americas" style="width:53.5%">10.7%</div></div>
+        </div>
+      </div>
+      <div class="threshold-note">⚠️ Ngưỡng cảnh báo: 20% &nbsp;|&nbsp; Tất cả segments dưới ngưỡng High-risk</div>
+    </div>
+  </div>
+
+  <!-- Watch Segments + At-Risk Customers -->
+  <div class="two-col">
+
+    <!-- Watch Segments -->
+    <div class="card">
+      <h2>⚠️ Watch Segments hôm nay — Top 3</h2>
+      <div class="segment-list">
+
+        <div class="seg-item watch-item">
+          <div class="seg-title">plan:Basic — 16.5% churn</div>
+          <div class="seg-desc">Segment churn cao nhất, gần ngưỡng cảnh báo 20%. MRR thấp ($47K) nhưng có 909 khách — mỗi 1% churn tăng thêm sẽ mất ~$560/tháng. Cần chương trình retention hoặc upgrade upsell.</div>
+        </div>
+
+        <div class="seg-item watch-item">
+          <div class="seg-title">region:APAC — 13.8% churn</div>
+          <div class="seg-desc">APAC có churn rate cao nhất theo vùng, đóng góp $185K MRR — lớn nhất 3 vùng. Churn cao trong vùng doanh thu cao là rủi ro kép; cần xem xét onboarding và support quality tại đây.</div>
+        </div>
+
+        <div class="seg-item watch-item">
+          <div class="seg-title">region:EMEA — 11.1% churn</div>
+          <div class="seg-desc">EMEA churn cao hơn Americas 0.4 điểm % dù MRR tương đương ($169K vs $124K). Tỷ lệ churn có thể liên quan đến giá cả hoặc cạnh tranh địa phương — đáng theo dõi theo quý.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- At-Risk Customers -->
+    <div class="card">
+      <h2>🔴 At-Risk Customers (Active, tenure &lt; 6 tháng)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Customer ID</th>
+            <th>Plan</th>
+            <th>Region</th>
+            <th>Tenure</th>
+            <th>MRR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CUS-1001</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td><span class="atrisk-badge">5 tháng</span></td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-3343</td>
+            <td>Pro</td>
+            <td>APAC</td>
+            <td><span class="atrisk-badge">4 tháng</span></td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-1882</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td><span class="atrisk-badge">2 tháng</span></td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-1565</td>
+            <td>Pro</td>
+            <td>Americas</td>
+            <td><span class="atrisk-badge">0 tháng</span></td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-3726</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td><span class="atrisk-badge">3 tháng</span></td>
+            <td>$150.00</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="threshold-note" style="margin-top:8px">
+        Top 5 theo MRR giảm dần &nbsp;|&nbsp; Tất cả đang ở plan Pro, cần outreach sớm
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    SaaS Health Briefing &nbsp;·&nbsp; Generated 2026-06-10 &nbsp;·&nbsp; Data snapshot 2026-06-09 &nbsp;·&nbsp; Threshold churn alert: 20%
+  </div>
+
+</div>
+</body>
+</html>
