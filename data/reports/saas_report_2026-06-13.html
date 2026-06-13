@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Health Briefing — 2026-06-13</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a2e; font-size: 13px; }
+  .page { max-width: 1100px; margin: 16px auto; padding: 0 12px; }
+
+  header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; border-radius: 10px; padding: 16px 24px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  header .meta { font-size: 11px; color: #94a3b8; }
+  .badge { background: #0f3460; border: 1px solid #1e5799; border-radius: 4px; padding: 3px 8px; font-size: 10px; color: #7dd3fc; }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .kpi { background: white; border-radius: 8px; padding: 14px 16px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .kpi.green { border-left-color: #10b981; }
+  .kpi.yellow { border-left-color: #f59e0b; }
+  .kpi.red { border-left-color: #ef4444; }
+  .kpi-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #0f172a; line-height: 1; }
+  .kpi-sub { font-size: 10px; color: #94a3b8; margin-top: 3px; }
+
+  /* MAIN LAYOUT */
+  .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  .card { background: white; border-radius: 8px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #64748b; margin-bottom: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 7px; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: .3px; padding: 4px 6px; text-align: right; font-weight: 600; }
+  th:first-child { text-align: left; }
+  td { padding: 5px 6px; text-align: right; border-bottom: 1px solid #f8fafc; font-size: 12px; }
+  td:first-child { text-align: left; font-weight: 600; color: #0f172a; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+
+  .status-badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+  .status-high { background: #fef2f2; color: #dc2626; }
+  .status-watch { background: #fffbeb; color: #d97706; }
+  .status-healthy { background: #f0fdf4; color: #16a34a; }
+
+  /* CHART */
+  .chart-container { height: 120px; display: flex; align-items: flex-end; gap: 8px; padding: 10px 4px 0; }
+  .bar-group { flex: 1; display: flex; gap: 3px; align-items: flex-end; flex-direction: column; }
+  .bar-wrap { width: 100%; display: flex; gap: 3px; align-items: flex-end; justify-content: center; }
+  .bar { flex: 1; border-radius: 3px 3px 0 0; transition: opacity .2s; position: relative; min-width: 18px; }
+  .bar-plan { background: #3b82f6; }
+  .bar-region { background: #8b5cf6; }
+  .bar:hover { opacity: .8; }
+  .chart-labels { display: flex; gap: 8px; padding-top: 4px; }
+  .chart-label { flex: 1; text-align: center; font-size: 9px; color: #64748b; }
+  .chart-legend { display: flex; gap: 12px; margin-bottom: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #64748b; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* AT-RISK */
+  .risk-table td:nth-child(2) { color: #6366f1; font-weight: 600; }
+  .tenure-low { color: #ef4444; font-weight: 700; }
+
+  /* HIGH-RISK SECTION */
+  .alert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
+  .alert-card { background: white; border-radius: 8px; padding: 13px 15px; box-shadow: 0 1px 3px rgba(0,0,0,.06); border-top: 3px solid #f59e0b; }
+  .alert-card.high { border-top-color: #ef4444; }
+  .alert-card.watch { border-top-color: #f59e0b; }
+  .alert-name { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+  .alert-stat { font-size: 11px; color: #64748b; margin-bottom: 6px; }
+  .alert-stat strong { color: #d97706; }
+  .alert-desc { font-size: 11px; color: #475569; line-height: 1.5; }
+
+  footer { text-align: center; font-size: 10px; color: #94a3b8; padding: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div>
+      <h1>SaaS Health Briefing — 2026-06-13</h1>
+      <div class="meta">Dữ liệu: 2026-06-12 &nbsp;·&nbsp; 3,000 khách hàng &nbsp;·&nbsp; Snapshot report</div>
+    </div>
+    <div class="badge">Auto-generated</div>
+  </header>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-label">Total MRR</div>
+      <div class="kpi-value">$507K</div>
+      <div class="kpi-sub">$507,490 / tháng</div>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-label">Churn Rate</div>
+      <div class="kpi-value">12.1%</div>
+      <div class="kpi-sub">363 / 3,000 KH đã rời</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Active Customers</div>
+      <div class="kpi-value">2,574</div>
+      <div class="kpi-sub">85.8% tổng KH</div>
+    </div>
+    <div class="kpi red">
+      <div class="kpi-label">Revenue at Risk</div>
+      <div class="kpi-value">$30.6K</div>
+      <div class="kpi-sub">6.0% của Total MRR</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID: Plan Table + Region Table -->
+  <div class="main-grid">
+
+    <!-- BY PLAN -->
+    <div class="card">
+      <div class="card-title">Phân tích theo Plan</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>KH</th>
+            <th>Churn</th>
+            <th>Active MRR</th>
+            <th>Rev@Risk</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Basic</td>
+            <td>1,660</td>
+            <td>16.5%</td>
+            <td>$47,322</td>
+            <td>$9,326</td>
+            <td><span class="status-badge status-watch">⚠️ Watch</span></td>
+          </tr>
+          <tr>
+            <td>Pro</td>
+            <td>880</td>
+            <td>8.2%</td>
+            <td>$89,140</td>
+            <td>$7,998</td>
+            <td><span class="status-badge status-healthy">✅ Healthy</span></td>
+          </tr>
+          <tr>
+            <td>Enterprise</td>
+            <td>460</td>
+            <td>3.5%</td>
+            <td>$371,029</td>
+            <td>$13,306</td>
+            <td><span class="status-badge status-healthy">✅ Healthy</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- BY REGION -->
+    <div class="card">
+      <div class="card-title">Phân tích theo Region</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Region</th>
+            <th>KH</th>
+            <th>Churn</th>
+            <th>Active MRR</th>
+            <th>Avg Tenure</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>APAC</td>
+            <td>1,140</td>
+            <td>13.8%</td>
+            <td>$185,562</td>
+            <td>17.1m</td>
+            <td><span class="status-badge status-healthy">✅ Healthy</span></td>
+          </tr>
+          <tr>
+            <td>EMEA</td>
+            <td>1,012</td>
+            <td>11.1%</td>
+            <td>$169,802</td>
+            <td>16.7m</td>
+            <td><span class="status-badge status-healthy">✅ Healthy</span></td>
+          </tr>
+          <tr>
+            <td>Americas</td>
+            <td>698</td>
+            <td>10.7%</td>
+            <td>$124,810</td>
+            <td>16.6m</td>
+            <td><span class="status-badge status-healthy">✅ Healthy</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHART + AT-RISK -->
+  <div class="main-grid">
+
+    <!-- CHART: Churn by Segment -->
+    <div class="card">
+      <div class="card-title">Churn Rate theo Segment</div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Plan</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> Region</div>
+        <div class="legend-item" style="margin-left:auto;font-size:9px;color:#94a3b8;">Ngưỡng cảnh báo: 20%</div>
+      </div>
+      <!-- SVG chart -->
+      <svg viewBox="0 0 500 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:110px;">
+        <!-- threshold line at 20% → y = 130 - (20/25)*110 = 130-88 = 42 -->
+        <line x1="0" y1="42" x2="500" y2="42" stroke="#fee2e2" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="496" y="39" text-anchor="end" font-size="8" fill="#ef4444">20%</text>
+
+        <!-- Basic 16.5% → h=72.6, y=57.4 -->
+        <rect x="30" y="57" width="40" height="73" fill="#3b82f6" rx="2"/>
+        <text x="50" y="52" text-anchor="middle" font-size="9" fill="#3b82f6" font-weight="600">16.5%</text>
+        <text x="50" y="122" text-anchor="middle" font-size="9" fill="#64748b">Basic</text>
+
+        <!-- Pro 8.2% → h=36.2, y=93.8 -->
+        <rect x="100" y="94" width="40" height="36" fill="#3b82f6" rx="2"/>
+        <text x="120" y="89" text-anchor="middle" font-size="9" fill="#3b82f6" font-weight="600">8.2%</text>
+        <text x="120" y="122" text-anchor="middle" font-size="9" fill="#64748b">Pro</text>
+
+        <!-- Enterprise 3.5% → h=15.4, y=114.6 -->
+        <rect x="170" y="115" width="40" height="15" fill="#3b82f6" rx="2"/>
+        <text x="190" y="110" text-anchor="middle" font-size="9" fill="#3b82f6" font-weight="600">3.5%</text>
+        <text x="190" y="122" text-anchor="middle" font-size="9" fill="#64748b">Enterprise</text>
+
+        <!-- divider -->
+        <line x1="250" y1="10" x2="250" y2="118" stroke="#f1f5f9" stroke-width="1"/>
+
+        <!-- APAC 13.8% → h=60.7, y=69.3 -->
+        <rect x="270" y="69" width="40" height="61" fill="#8b5cf6" rx="2"/>
+        <text x="290" y="64" text-anchor="middle" font-size="9" fill="#8b5cf6" font-weight="600">13.8%</text>
+        <text x="290" y="122" text-anchor="middle" font-size="9" fill="#64748b">APAC</text>
+
+        <!-- EMEA 11.1% → h=48.8, y=81.2 -->
+        <rect x="340" y="81" width="40" height="49" fill="#8b5cf6" rx="2"/>
+        <text x="360" y="76" text-anchor="middle" font-size="9" fill="#8b5cf6" font-weight="600">11.1%</text>
+        <text x="360" y="122" text-anchor="middle" font-size="9" fill="#64748b">EMEA</text>
+
+        <!-- Americas 10.7% → h=47.1, y=82.9 -->
+        <rect x="410" y="83" width="40" height="47" fill="#8b5cf6" rx="2"/>
+        <text x="430" y="78" text-anchor="middle" font-size="9" fill="#8b5cf6" font-weight="600">10.7%</text>
+        <text x="430" y="122" text-anchor="middle" font-size="9" fill="#64748b">Americas</text>
+      </svg>
+    </div>
+
+    <!-- AT-RISK CUSTOMERS -->
+    <div class="card">
+      <div class="card-title">Top 5 At-risk Customers (Active, Tenure &lt; 6 tháng)</div>
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th>Customer ID</th>
+            <th>Plan</th>
+            <th>Region</th>
+            <th>Tenure</th>
+            <th>MRR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CUS-1001</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td class="tenure-low">5m</td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-3343</td>
+            <td>Pro</td>
+            <td>APAC</td>
+            <td class="tenure-low">4m</td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-1882</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td class="tenure-low">2m</td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-1565</td>
+            <td>Pro</td>
+            <td>Americas</td>
+            <td class="tenure-low">0m</td>
+            <td>$150.00</td>
+          </tr>
+          <tr>
+            <td>CUS-3726</td>
+            <td>Pro</td>
+            <td>EMEA</td>
+            <td class="tenure-low">3m</td>
+            <td>$150.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- HIGH-RISK SEGMENTS -->
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-title">Segments đáng chú ý hôm nay — top 3 theo churn rate</div>
+    <div class="alert-grid" style="margin-top:8px;">
+
+      <div class="alert-card watch">
+        <div class="alert-name">⚠️ Basic Plan</div>
+        <div class="alert-stat">Churn <strong>16.5%</strong> · 274 KH đã rời · RAR $9,326</div>
+        <div class="alert-desc">Basic là plan có churn cao nhất (16.5%), gấp đôi Pro. Nhóm KH này có tenure trung bình 17.1 tháng — dấu hiệu thiếu loyalty dài hạn. Cần xem xét cải thiện onboarding và giá trị ở giai đoạn năm 2.</div>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-name" style="color:#0f172a;">📍 APAC Region</div>
+        <div class="alert-stat">Churn <strong style="color:#d97706;">13.8%</strong> · 157 KH đã rời · MRR $185,562</div>
+        <div class="alert-desc">APAC dẫn đầu churn theo region (13.8%) với số lượng KH lớn nhất (1,140). Tuy chưa vượt ngưỡng cảnh báo nhưng cần theo dõi sát — đây là thị trường có MRR cao nhất.</div>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-name" style="color:#0f172a;">📍 EMEA Region</div>
+        <div class="alert-stat">Churn <strong style="color:#d97706;">11.1%</strong> · 112 KH đã rời · MRR $169,802</div>
+        <div class="alert-desc">EMEA ổn định hơn APAC nhưng tập trung nhiều at-risk customers (3/5 top at-risk là EMEA). Pro users mới dưới 6 tháng ở EMEA cần được chăm sóc chủ động để giảm nguy cơ early churn.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    Báo cáo tự động · Dữ liệu: 2026-06-12 · Ngưỡng cảnh báo: churn &gt; 20% = 🚨 High-risk · Phân tích: descriptive only, không có predictive
+  </footer>
+
+</div>
+</body>
+</html>
