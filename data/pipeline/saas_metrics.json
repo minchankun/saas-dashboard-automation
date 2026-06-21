@@ -1,69 +1,71 @@
 {
-  "date": "2026-06-09",
-  "overall": {
-    "total_mrr": 507490.28,
+  "generated_at": "2026-06-21",
+  "summary": {
     "total_customers": 3000,
     "active_customers": 2574,
-    "churned_customers": 429,
-    "overall_churn_rate": 0.143,
-    "revenue_at_risk": 41144.22
+    "churned_customers": 362,
+    "total_mrr": 507490.28,
+    "overall_churn_rate": 0.1207,
+    "revenue_at_risk": 30630.12
   },
   "by_plan": {
-    "Basic": {
-      "total": 1660,
-      "active": 1348,
-      "churned": 315,
-      "churn_rate": 0.1897590361445783,
-      "mrr": 47321.79999999996,
-      "avg_tenure": 17.08132530120482,
-      "revenue_at_risk": 10703.110000000004
-    },
     "Pro": {
-      "total": 880,
-      "active": 791,
-      "churned": 89,
-      "churn_rate": 0.10113636363636364,
-      "mrr": 89139.7899999999,
-      "avg_tenure": 16.693181818181817,
-      "revenue_at_risk": 9750.14
+      "customers": 880,
+      "churned": 72,
+      "churn_rate": 0.0818,
+      "mrr": 89139.79,
+      "revenue_at_risk": 7998.26,
+      "avg_tenure": 16.6932
+    },
+    "Basic": {
+      "customers": 1660,
+      "churned": 274,
+      "churn_rate": 0.1651,
+      "mrr": 47321.8,
+      "revenue_at_risk": 9326.05,
+      "avg_tenure": 17.0813
     },
     "Enterprise": {
-      "total": 460,
-      "active": 435,
-      "churned": 25,
-      "churn_rate": 0.05434782608695652,
-      "mrr": 371028.68999999965,
-      "avg_tenure": 16.76304347826087,
-      "revenue_at_risk": 20690.969999999998
+      "customers": 460,
+      "churned": 16,
+      "churn_rate": 0.0348,
+      "mrr": 371028.69,
+      "revenue_at_risk": 13305.81,
+      "avg_tenure": 16.763
     }
   },
   "by_region": {
     "APAC": {
-      "total": 1140,
-      "active": 963,
-      "churned": 178,
-      "churn_rate": 0.156140350877193,
-      "mrr": 185561.83000000002,
-      "avg_tenure": 17.106140350877194,
-      "revenue_at_risk": 15918.690000000008
+      "customers": 1140,
+      "churned": 157,
+      "churn_rate": 0.1377,
+      "mrr": 185561.83,
+      "revenue_at_risk": 12199.77,
+      "avg_tenure": 17.1061
     },
     "EMEA": {
-      "total": 1012,
-      "active": 870,
-      "churned": 143,
-      "churn_rate": 0.14130434782608695,
-      "mrr": 169802.43999999992,
-      "avg_tenure": 16.711462450592887,
-      "revenue_at_risk": 14747.900000000005
+      "customers": 1012,
+      "churned": 112,
+      "churn_rate": 0.1107,
+      "mrr": 169802.44,
+      "revenue_at_risk": 10609.12,
+      "avg_tenure": 16.7115
+    },
+    "Unknown": {
+      "customers": 150,
+      "churned": 18,
+      "churn_rate": 0.12,
+      "mrr": 27315.72,
+      "revenue_at_risk": 616.17,
+      "avg_tenure": 18.36
     },
     "Americas": {
-      "total": 698,
-      "active": 609,
-      "churned": 90,
-      "churn_rate": 0.12893982808022922,
-      "mrr": 124810.29000000001,
-      "avg_tenure": 16.603151862464184,
-      "revenue_at_risk": 9861.46
+      "customers": 698,
+      "churned": 75,
+      "churn_rate": 0.1074,
+      "mrr": 124810.29,
+      "revenue_at_risk": 7205.06,
+      "avg_tenure": 16.6032
     }
   },
   "at_risk_customers": [
@@ -102,6 +104,5 @@
       "tenure_months": 3,
       "monthly_revenue": 150.0
     }
-  ],
-  "churn_alert_threshold": 0.2
+  ]
 }
