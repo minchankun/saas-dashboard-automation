@@ -1,23 +1,14 @@
 {
-  "date": "2026-06-09",
+  "date": "2026-07-05",
   "overall": {
     "total_mrr": 507490.28,
     "total_customers": 3000,
     "active_customers": 2574,
-    "churned_customers": 429,
-    "overall_churn_rate": 0.143,
-    "revenue_at_risk": 41144.22
+    "churned_customers": 426,
+    "overall_churn_rate": 0.142,
+    "revenue_at_risk": 41052.85
   },
   "by_plan": {
-    "Basic": {
-      "total": 1660,
-      "active": 1348,
-      "churned": 315,
-      "churn_rate": 0.1897590361445783,
-      "mrr": 47321.79999999996,
-      "avg_tenure": 17.08132530120482,
-      "revenue_at_risk": 10703.110000000004
-    },
     "Pro": {
       "total": 880,
       "active": 791,
@@ -26,6 +17,15 @@
       "mrr": 89139.7899999999,
       "avg_tenure": 16.693181818181817,
       "revenue_at_risk": 9750.14
+    },
+    "Basic": {
+      "total": 1660,
+      "active": 1348,
+      "churned": 312,
+      "churn_rate": 0.18795180722891566,
+      "mrr": 47321.79999999996,
+      "avg_tenure": 17.08132530120482,
+      "revenue_at_risk": 10611.740000000003
     },
     "Enterprise": {
       "total": 460,
@@ -41,29 +41,29 @@
     "APAC": {
       "total": 1140,
       "active": 963,
-      "churned": 178,
-      "churn_rate": 0.156140350877193,
+      "churned": 177,
+      "churn_rate": 0.15526315789473685,
       "mrr": 185561.83000000002,
       "avg_tenure": 17.106140350877194,
-      "revenue_at_risk": 15918.690000000008
+      "revenue_at_risk": 15887.490000000007
     },
     "EMEA": {
       "total": 1012,
       "active": 870,
-      "churned": 143,
-      "churn_rate": 0.14130434782608695,
+      "churned": 142,
+      "churn_rate": 0.14031620553359683,
       "mrr": 169802.43999999992,
       "avg_tenure": 16.711462450592887,
-      "revenue_at_risk": 14747.900000000005
+      "revenue_at_risk": 14716.390000000005
     },
     "Americas": {
       "total": 698,
       "active": 609,
-      "churned": 90,
-      "churn_rate": 0.12893982808022922,
+      "churned": 89,
+      "churn_rate": 0.12750716332378223,
       "mrr": 124810.29000000001,
       "avg_tenure": 16.603151862464184,
-      "revenue_at_risk": 9861.46
+      "revenue_at_risk": 9832.8
     }
   },
   "at_risk_customers": [
